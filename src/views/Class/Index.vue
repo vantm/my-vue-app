@@ -21,7 +21,7 @@
     +pagination
     b-table(
       striped hover
-      :busy="isFetching"
+      :busy="isApiBusy"
       :items="items"
       :fields="fields")
       template(v-slot:cell(id)="data")
@@ -29,7 +29,7 @@
       template(v-slot:cell(actions)="data")
         b-button(variant="warning" :to="{name: 'edit-class', params: { id: data.item.id }}") edit
         | &nbsp;
-        b-button(variant="danger") delete
+        b-button(variant="danger" @click="removeAsync(data.item.id)") delete
       template(v-slot:table-busy)
         .text-center.text-info.my-2
           b-spinner.align-middle
@@ -68,12 +68,16 @@ export default {
       totalPages: ({ class: { totalPages } }) => totalPages,
       pageIndex: ({ class: { pageIndex } }) => pageIndex,
       pageSize: ({ class: { pageSize } }) => pageSize,
-      isFetching: ({ class: { isFetching } }) => isFetching
+      isApiBusy: ({ class: { isFetching, isDeleting } }) =>
+        isFetching || isDeleting,
+      isApiFailed: ({ class: { isFetchingFailure, isDeletingFailure } }) =>
+        isFetchingFailure || isDeletingFailure
     })
   },
   methods: {
     ...mapActions({
-      loadAsync: "class/loadAsync"
+      loadAsync: "class/loadAsync",
+      deleteAsync: "class/deleteAsync"
     }),
     linkGen(pageNum) {
       return {
@@ -89,6 +93,10 @@ export default {
     },
     async pageSizeChangedAsync(pageSize) {
       await this.loadAsync({ pageIndex: 1, pageSize });
+    },
+    async removeAsync(id) {
+      await this.deleteAsync(id);
+      await this.fetchDataAsync();
     }
   },
   async created() {
