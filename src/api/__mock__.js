@@ -8,6 +8,6 @@ export const paginate = (list, pageIndex, pageSize) => {
   const items = list.slice(offset, offset + pageSize);
   return {
     totalPages: Math.ceil(list.length / pageSize),
-    items
+    items: items.map(x => ({ ...x }))
   };
 };

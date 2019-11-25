@@ -1,7 +1,7 @@
 import { delay, random, paginate } from "./__mock__";
 
-export const getStudentsAsync = async (pageIndex, pageSize) => {
-  await delay(random(100, 300));
+export const fetchAsync = async (pageIndex, pageSize) => {
+  await delay(random(200, 500));
   return paginate(students, pageIndex, pageSize);
 };
 
