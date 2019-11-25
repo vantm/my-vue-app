@@ -6,8 +6,9 @@
         b-navbar-toggle(target="nav-collapse")
         b-collapse#nav-collapse(is-nav)
           b-navbar-nav
-            b-nav-item(to="/course") Course
+            b-nav-item(to="/class") Class
             b-nav-item(to="/student") Student
+            b-nav-item(to="/course") Course
             b-nav-item(to="/about") About
     main
       .container

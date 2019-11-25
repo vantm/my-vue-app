@@ -19,12 +19,13 @@ export async function fetchSingleAsync(id) {
   }
 }
 
-export async function postAsync({ name }) {
+export async function postAsync({ name, price }) {
   await delay(random(100, 200));
 
   const classItem = {
     id: publicId++,
-    name
+    name,
+    price
   };
 
   classes.push(classItem);
@@ -32,7 +33,7 @@ export async function postAsync({ name }) {
   return { ...classItem };
 }
 
-export async function putAsync({ id, name }) {
+export async function putAsync({ id, name, price }) {
   await delay(random(100, 200));
 
   const intId = parseInt(id);
@@ -40,6 +41,7 @@ export async function putAsync({ id, name }) {
 
   if (item) {
     item.name = name;
+    item.price = price;
     return { ...item };
   } else {
     throw "Class not found";

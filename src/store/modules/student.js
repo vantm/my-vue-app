@@ -5,7 +5,8 @@ const state = {
   pageIndex: 1,
   pageSize: 10,
   totalPages: 0,
-  isFetching: false
+  isFetching: false,
+  isFetchingFailure: false
 };
 
 const getters = {};
@@ -30,7 +31,7 @@ const actions = {
 
     commit("setFetching");
     const result = await fetchAsync(pageIndex, pageSize).catch(() =>
-      commit("unsetFetching")
+      commit("unsetFetching", true)
     );
     commit("unsetFetching");
     commit("setItems", result);
@@ -50,9 +51,11 @@ const mutations = {
   },
   setFetching(state) {
     state.isFetching = true;
+    state.isFetchingFailure = false;
   },
-  unsetFetching(state) {
+  unsetFetching(state, failed) {
     state.isFetching = false;
+    state.isFetchingFailure = failed;
   }
 };
 
