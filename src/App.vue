@@ -1,29 +1,15 @@
-<template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-  </div>
+<template lang="pug">
+  div
+    header.mb-2
+      b-navbar(toggleable="lg" type="dark" variant="success")
+        b-navbar-brand(to="/") My Vue App
+        b-navbar-toggle(target="nav-collapse")
+        b-collapse#nav-collapse(is-nav)
+          b-navbar-nav
+            b-nav-item(to="/course") Course
+            b-nav-item(to="/student") Student
+            b-nav-item(to="/about") About
+    main
+      .container
+        router-view
 </template>
-
-<style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
