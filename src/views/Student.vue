@@ -49,8 +49,8 @@ export default {
         { key: "name", label: "Name" }
       ],
       breadcrumbs: [
-        { text: "Home", to: "/" },
-        { text: "Student", to: "/student" }
+        { text: "Home", to: { name: "home" } },
+        { text: "Student", to: { name: "student" } }
       ]
     };
   },

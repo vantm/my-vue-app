@@ -32,62 +32,57 @@
     +pagination
 </template>
 <script>
-  import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
-  export default {
-    data() {
-      return {
-        pageSizeList: [
-          { value: 5, text: "5" },
-          { value: 10, text: "10" },
-          { value: 20, text: "20" },
-          { value: 50, text: "50" },
-          { value: 100, text: "100" }
-        ],
-        fields: [
-          { key: "id", label: "ID" },
-          { key: "name", label: "Name" }
-        ],
-        breadcrumbs: [
-          { text: "Home", to: "/" },
-          { text: "Course", to: "/course" }
-        ]
-      };
+export default {
+  data() {
+    return {
+      pageSizeList: [
+        { value: 5, text: "5" },
+        { value: 10, text: "10" },
+        { value: 20, text: "20" },
+        { value: 50, text: "50" },
+        { value: 100, text: "100" }
+      ],
+      fields: [
+        { key: "id", label: "ID" },
+        { key: "name", label: "Name" }
+      ],
+      breadcrumbs: [
+        { text: "Home", to: { name: "home" } },
+        { text: "Course", to: { name: "course" } }
+      ]
+    };
+  },
+  computed: {
+    ...mapState({
+      items: ({ course: { items } }) => items,
+      totalPages: ({ course: { totalPages } }) => totalPages,
+      pageIndex: ({ course: { pageIndex } }) => pageIndex,
+      pageSize: ({ course: { pageSize } }) => pageSize,
+      isFetching: ({ course: { isFetching } }) => isFetching
+    })
+  },
+  methods: {
+    ...mapActions({
+      loadAsync: "course/loadAsync"
+    }),
+    linkGen(pageNum) {
+      return { name: "course", query: { page: pageNum } };
     },
-    computed: {
-      ...mapState({
-        items: ({ course: { items } }) => items,
-        totalPages: ({ course: { totalPages } }) => totalPages,
-        pageIndex: ({ course: { pageIndex } }) => pageIndex,
-        pageSize: ({ course: { pageSize } }) => pageSize,
-        isFetching: ({ course: { isFetching } }) => isFetching
-      })
+    async fetchDataAsync() {
+      const pageIndex = this.$route.query.page;
+      await this.loadAsync({ pageIndex });
     },
-    methods: {
-      ...mapActions({
-        loadAsync: "course/loadAsync"
-      }),
-      linkGen(pageNum) {
-        return {
-          path: "/course",
-          query: {
-            page: pageNum
-          }
-        };
-      },
-      async fetchDataAsync() {
-        const pageIndex = this.$route.query.page;
-        await this.loadAsync({ pageIndex });
-      },
-      async pageSizeChangedAsync(pageSize) {
-        await this.loadAsync({ pageIndex: 1, pageSize });
-      }
-    },
-    async created() {
-      await this.fetchDataAsync();
-    },
-    watch: {
-      $route: "fetchDataAsync"
+    async pageSizeChangedAsync(pageSize) {
+      await this.loadAsync({ pageIndex: 1, pageSize });
     }
-  };
+  },
+  async created() {
+    await this.fetchDataAsync();
+  },
+  watch: {
+    $route: "fetchDataAsync"
+  }
+};
 </script>

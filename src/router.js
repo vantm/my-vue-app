@@ -32,6 +32,11 @@ export default new Router({
       component: () => import("./views/Class/Add")
     },
     {
+      path: "/class/edit/:id",
+      name: "edit-class",
+      component: () => import("./views/Class/Edit")
+    },
+    {
       path: "/class",
       name: "class",
       component: () => import("./views/Class/Index")

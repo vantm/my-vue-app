@@ -27,7 +27,7 @@
       template(v-slot:cell(id)="data")
         code {{ data.value }}
       template(v-slot:cell(actions)="data")
-        b-button(variant="warning") edit
+        b-button(variant="warning" :to="{name: 'edit-class', params: { id: data.item.id }}") edit
         | &nbsp;
         b-button(variant="danger") delete
       template(v-slot:table-busy)
@@ -57,8 +57,8 @@ export default {
         { key: "actions", label: "Actions" }
       ],
       breadcrumbs: [
-        { text: "Home", to: "/" },
-        { text: "Class", to: "/class" }
+        { text: "Home", to: { name: "home" } },
+        { text: "Class", to: { name: "class" } }
       ]
     };
   },
