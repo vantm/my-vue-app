@@ -29,13 +29,15 @@
       template(v-slot:cell(actions)="data")
         b-button(variant="warning" :to="{name: 'edit-class', params: { id: data.item.id }}") edit
         | &nbsp;
-        b-button(variant="danger" @click="removeAsync(data.item.id)") delete
+        b-button(variant="danger" v-b-modal.modal-1 @click="askForRemove(data.item.id)") delete
       template(v-slot:table-busy)
         .text-center.text-info.my-2
           b-spinner.align-middle
           | &nbsp;
           strong Loading . . .
     +pagination
+    b-modal#modal-1(title="Delete class" @ok="removeAsync")
+      p.my-4 Are you sure?
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
@@ -59,7 +61,8 @@ export default {
       breadcrumbs: [
         { text: "Home", to: { name: "home" } },
         { text: "Class", to: { name: "class" } }
-      ]
+      ],
+      deleteId: 0
     };
   },
   computed: {
@@ -94,9 +97,16 @@ export default {
     async pageSizeChangedAsync(pageSize) {
       await this.loadAsync({ pageIndex: 1, pageSize });
     },
-    async removeAsync(id) {
-      await this.deleteAsync(id);
+    async removeAsync() {
+      if (this.delete >= 0) {
+        return;
+      }
+
+      await this.deleteAsync(this.deleteId);
       await this.fetchDataAsync();
+    },
+    askForRemove(id) {
+      this.$set(this.$data, "deleteId", id);
     }
   },
   async created() {
